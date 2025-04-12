@@ -70,15 +70,18 @@ class ATBloomFilter:
         return True
 
     def _calculate_p(self):
-        if self.n == 0:
-            temp_n = 1
-        else:
-            temp_n = self.n
+        """Calculate probability of false positive
 
-        if temp_n >= self.m:
-            self.p = 1
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        if self.n == 0:
+            self.p = 0
         else:
-            self.p = math.e ** (-(self.m / temp_n) * (math.log(2) ** 2))
+            self.p = pow(1 - math.exp(-self.k / (self.m / self.n)), self.k)
 
     def _hash(self, item: Any):
         """Hash the item
@@ -93,7 +96,13 @@ class ATBloomFilter:
 
 
 class ATScalableBloomFilter:
-    """ """
+    """A self-scaling implementation of a bloom filter
+
+    This data structure will automatically create a new bloom filter on top
+    of the existing bloom filter(s) when the probability of false positives (p)
+    exceeds the specified threshold (desired_p). In order to check for membership,
+    all bloom filters in the stack must be searched.
+    """
 
     def __init__(
         self,

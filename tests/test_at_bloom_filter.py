@@ -66,12 +66,10 @@ def test_p_calculation(args):
     # When
 
     # Then
-    if bf.n >= m:
-        assert bf.p == 1
+    if bf.n == 0:
+        assert bf.p == 0
     else:
-        assert bf.p == math.e ** (
-            -(bf.m / (bf.n if bf.n > 0 else 1)) * (math.log(2) ** 2)
-        )
+        assert bf.p == pow(1 - math.exp(-bf.k / (bf.m / bf.n)), bf.k)
 
 
 @given(bloom_filter_arguments())
