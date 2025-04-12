@@ -1,11 +1,14 @@
 [project]
 name = "at-lib"
 version = "0.1.0"
-author = "Alex Talbott"
+authors = [
+    {name = "Alex Talbott", email = "atalbott13@gmail.com"},
+]
 description = "My interpretations of anything I find interesting"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "mmh3>=5.1.0",
     "pre-commit>=4.2.0",
 ]
 

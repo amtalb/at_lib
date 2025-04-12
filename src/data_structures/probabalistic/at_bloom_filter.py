@@ -1,6 +1,8 @@
 import math
 from typing import Any, Optional
 
+import mmh3
+
 
 class ATBloomFilter:
     """A bloom filter"""
@@ -41,9 +43,9 @@ class ATBloomFilter:
         Returns:
             None
         """
-        for _ in range(self.k):
-            hash_val = self._hash(item)
-            self._bit_array[hash_val % self.m] = 1
+        for i in range(self.k):
+            hash_val = self._hash(item, i)
+            self._bit_array[hash_val] = 1
 
         # update n and p
         self.n += 1
@@ -62,9 +64,9 @@ class ATBloomFilter:
         Returns:
             bool
         """
-        for _ in range(self.k):
-            hash_val = self._hash(item)
-            if self._bit_array[hash_val % self.m] != 1:
+        for i in range(self.k):
+            hash_val = self._hash(item, i)
+            if self._bit_array[hash_val] != 1:
                 return False
 
         return True
@@ -83,16 +85,20 @@ class ATBloomFilter:
         else:
             self.p = pow(1 - math.exp(-self.k / (self.m / self.n)), self.k)
 
-    def _hash(self, item: Any):
+    def _hash(self, item: Any, i: int):
         """Hash the item
 
         Args:
             item (Any): the item to be hashed
+            i (int): a counter indicating the hash function number. Used
+                to salt the hash functions
 
         Returns:
             int: the hashed value
         """
-        return hash(item)
+        h1 = mmh3.hash(str(item), 0) % self.m
+        h2 = mmh3.hash(str(item), 1) % self.m
+        return (h1 + i * h2) % self.m
 
 
 class ATScalableBloomFilter:
