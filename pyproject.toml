@@ -16,7 +16,39 @@ at_lib = "at_lib.src:main"
 dev = [
     "hypothesis>=6.131.0",
     "jupyter>=1.1.1",
-    "pylint>=3.3.6",
     "pytest>=8.3.5",
     "pytest-cov>=6.1.1",
+    "ruff>=0.11.5",
 ]
+
+
+[tool.pytest.ini_options]
+addopts = "--cov=at_lib --cov-report=html --verbose"
+
+[tool.ruff]
+extend-exclude = ["*.ipynb"]
+force-exclude = true
+line-length = 88
+indent-width = 4
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "I",
+    "F",
+]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = false
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
